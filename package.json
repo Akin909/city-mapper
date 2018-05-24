@@ -1,10 +1,11 @@
 {
-    "name": "city-mapper",
+    "name": "mini-mapper",
     "version": "1.0.0",
     "main": "lib/index.js",
     "license": "MIT",
     "scripts": {
-        "start": "parcel index.html"
+        "start": "parcel index.html",
+        "test": "jest --watch"
     },
     "devDependencies": {
         "babel-cli": "^6.26.0",
@@ -16,13 +17,21 @@
         "enzyme": "^3.3.0",
         "enzyme-adapter-react-16": "^1.1.1",
         "flow-bin": "^0.72.0",
+        "flow-language-server": "^0.5.0",
         "jest": "^23.0.0",
         "prettier": "^1.12.1",
         "react": "^16.4.0",
         "react-dom": "^16.4.0"
     },
     "dependencies": {
+        "apollo-boost": "^0.1.6",
+        "apollo-cache-inmemory": "^1.2.1",
+        "apollo-link-http": "^1.5.4",
+        "apollo-link-state": "^0.4.1",
+        "graphql": "^0.13.2",
+        "graphql-tag": "^2.9.2",
         "rambda": "^1.1.2",
+        "react-apollo": "^2.1.4",
         "styled-components": "^3.2.6"
     }
 }
