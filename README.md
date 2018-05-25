@@ -8,7 +8,7 @@ at that stop.
 
 Initial Setup:
 
-Using parcel to as opposed to webpack, for simplicity
+Using parcel as opposed to webpack, for simplicity
 added react, prettier (to amazingly autoformat my code), enzyme and jest(so I don't look up in an hour and realise there are no tests).
 Added typescript for static type analysis.
 

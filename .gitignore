@@ -2,3 +2,4 @@ node_modules
 .oni
 .cache
 dist
+.env
