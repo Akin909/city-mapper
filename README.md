@@ -18,3 +18,7 @@ This project uses React-apollo with apollo link state as an alternative to state
 well as the now stable react `context` api to manage application state.
 
 Components are organised using atomic design which promotes composability and reusability of the ui.
+
+### Optimisations (Once the app is completed)
+
+Improve strategy for querying API i.e. some form of polling but otherwise if no access then use cache data.

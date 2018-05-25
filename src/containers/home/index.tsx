@@ -3,76 +3,71 @@ import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import styled from 'styled-components';
 
-const Container = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    padding: 0 5%;
-`;
-
-const Grid = styled.div`
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-column-gap: 1em;
-`;
+import * as tfl from './../../graphql/queries/tfl';
+import Container from './../../components/atoms/flexContainer';
+import ErrorHandler from './../../components/organisms/errorHandler';
+import TubeLines from './../../components/organisms/tubeLines';
+import Stop from './../../components/organisms/stops';
 
 const Title = styled.h1`
     display: flex;
 `;
 
-import { GET_LINE_STATUSES } from './../../graphql/queries/tfl';
-
-interface Props {}
-
-interface Status {
-    severity: string;
-    statusSeverityDescription: string;
+interface State {
+    selected: string;
 }
 
-interface LineProps {
-    line: {
-        name: string;
-        lineStatuses: Status[];
+class Home extends React.Component<{}, State> {
+    state = {
+        selected: null,
     };
-}
 
-const Line = ({ line }: LineProps) => (
-    <div>
-        <h3>{line.name}</h3>
-        {line.lineStatuses &&
-            line.lineStatuses.map(status => (
-                <React.Fragment>
-                    <span>{status.severity}</span>
-                    <span>{status.statusSeverityDescription}</span>
-                </React.Fragment>
-            ))}
-    </div>
-);
+    handleClick = (name: string) => () => {
+        this.setState({ selected: name });
+    };
 
-class Home extends React.Component<Props> {
-    async componentDidMount() {}
     render() {
+        const { selected } = this.state;
         return (
             <Container>
                 <Title>Mini Mapper</Title>
-                <Query query={GET_LINE_STATUSES}>
-                    {({ data, error, loading }) =>
-                        loading ? (
-                            <div>Loading...</div>
-                        ) : data && data.lines ? (
-                            <Grid>
-                                {data.lines.map((line, index) => (
-                                    <Line line={line} key={line + index} />
-                                ))}
-                            </Grid>
-                        ) : (
-                            <div>No data</div>
-                        )
-                    }
-                </Query>
+                {!selected ? (
+                    <Query query={tfl.GET_LINE_STATUSES}>
+                        {({ data, error, loading }) => (
+                            <ErrorHandler
+                                loaded={data && data.lines}
+                                loading={loading}
+                                error={error}
+                                data={data}
+                                render={({ lines }) => (
+                                    <TubeLines
+                                        lines={lines}
+                                        onClick={this.handleClick}
+                                    />
+                                )}
+                            />
+                        )}
+                    </Query>
+                ) : (
+                    <Query
+                        query={tfl.GET_LINE_DETAILS}
+                        variables={{ line: selected }}
+                    >
+                        {({ data, error, loading }) => (
+                            <React.Fragment>
+                                <ErrorHandler
+                                    data={data}
+                                    loading={loading}
+                                    error={error}
+                                    loaded={data && data.line}
+                                    render={({ line }) => (
+                                        <Stop stop={data.line} />
+                                    )}
+                                />
+                            </React.Fragment>
+                        )}
+                    </Query>
+                )}
             </Container>
         );
     }

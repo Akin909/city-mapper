@@ -7,12 +7,11 @@ import { HttpLink } from 'apollo-link-http';
 import { RestLink } from 'apollo-link-rest';
 import { ApolloLink } from 'apollo-link';
 
-import '../utils/global.css';
-import resolvers from './../graphql/resolvers';
-import Home from './home';
+import '../../utils/global.css';
+import resolvers from './../../graphql/resolvers';
+import Home from './../home';
 
 const defaults = {
-    trainLines: [],
     networkStatus: {
         __typename: 'NetworkStatus',
         isConnected: true,
@@ -32,13 +31,13 @@ interface Lines {
     created: string;
     modified: string;
 }
-
-interface Data {
-    results: Lines[];
-}
-
-const addTypename = (typename: string, results: any[]) =>
-    results.map(res => ({ __typename: typename, ...res }));
+const addTypename = (typename: string, data: any[]) =>
+    data
+        ? data.map(res => ({
+              __typename: typename,
+              ...res,
+          }))
+        : data;
 
 const restLink = new RestLink({
     uri: process.env.TFL_API,
@@ -46,15 +45,14 @@ const restLink = new RestLink({
         app_id: process.env.APP_ID,
         app_key: process.env.APP_KEY,
     },
+    // If the returning data is nested adding a typepatcher allows
+    // for adding a typename to the nested object or array
     typePatcher: {
-        Line: (
+        LineDetails: (
             data: any,
             outerType: string,
             patchDeeper: RestLink.FunctionalTypePatcher,
-        ): Data =>
-            data.results
-                ? { ...data, results: addTypename('Line', data.results) }
-                : data,
+        ) => ({ ...data, stations: addTypename('Station', data.stations) }),
     },
 });
 
