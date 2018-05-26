@@ -2,15 +2,15 @@ import * as React from 'react';
 
 import Loading from './../../atoms/loading';
 
-interface ErrorHandlerProps {
-    data: any;
-    error: any;
+interface ErrorHandlerProps<T> {
+    data: T;
+    error: object;
     loading: boolean;
     loaded: boolean;
-    render: (data: any) => React.ReactElement<any>;
+    render: (data: T) => React.ReactElement<T>;
 }
 
-const ErrorHandler = (props: ErrorHandlerProps) => {
+const ErrorHandler = (props: ErrorHandlerProps<any>) => {
     const { loading, data, loaded } = props;
     if (loading) {
         return <Loading />;

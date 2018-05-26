@@ -2,26 +2,20 @@ import * as React from 'react';
 import styled from 'styled-components';
 import * as R from 'rambda';
 
-interface Status {
-    severity: string;
-    statusSeverityDescription: string;
-}
+import { Lines } from './../../../graphql/queries/tfl';
 
 interface LineProps {
-    line: {
-        name: string;
-        lineStatuses: Status[];
-    };
+    line: Lines;
     onClick: (evt: React.MouseEvent<HTMLDivElement>) => void;
 }
 
-const statusReactionMap = {
+const statusReactions = {
     goodService: '😀',
     minorDelays: '😣',
     severeDelays: '🤬',
 };
 
-const lineColorMap = {
+const lineColors = {
     bakerloo: '#996633',
     piccadilly: '#000099',
     circle: '#FFCC00',
@@ -40,7 +34,7 @@ interface ContainerProps {
     onClick: (evt: React.MouseEvent<HTMLDivElement>) => void;
 }
 const LineContainer = styled<ContainerProps, 'div'>('div')`
-    background-color: ${p => lineColorMap[p.line]};
+    background-color: ${p => lineColors[p.line]};
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -70,7 +64,7 @@ const normalize = R.compose(camelize, replaceAmpersand, R.toLower);
 
 const respondToStatus = (status: string) => {
     const normalizedStatus = normalize(status);
-    return ` ${statusReactionMap[normalizedStatus] || ''}`;
+    return ` ${statusReactions[normalizedStatus] || ''}`;
 };
 
 const Line = ({ line, onClick }: LineProps) => (

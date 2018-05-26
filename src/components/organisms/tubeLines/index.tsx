@@ -2,17 +2,10 @@ import * as React from 'react';
 
 import Grid from './../../atoms/grid';
 import Line from './../../molecules/line';
-
-interface LineStatuses {
-    severity: string;
-    statusSeverityDescription: string;
-}
+import { Lines } from './../../../graphql/queries/tfl';
 
 interface TubelinesProps {
-    lines: Array<{
-        name: string;
-        lineStatuses: LineStatuses[];
-    }>;
+    lines: Lines[];
     onClick: (name: string) => () => void;
 }
 const TubeLines = ({ lines, onClick }: TubelinesProps) => (

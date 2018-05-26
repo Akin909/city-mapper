@@ -1,8 +1,10 @@
 import * as React from 'react';
-import gql from 'graphql-tag';
-import { Query } from 'react-apollo';
 import styled from 'styled-components';
 
+import {
+    GetLineStatusesQuery,
+    GetLineDetailsQuery,
+} from './../../graphql/queries/tfl';
 import * as tfl from './../../graphql/queries/tfl';
 import Container from './../../components/atoms/flexContainer';
 import ErrorHandler from './../../components/organisms/errorHandler';
@@ -18,7 +20,7 @@ interface State {
 }
 
 class Home extends React.Component<{}, State> {
-    state = {
+    state: State = {
         selected: null,
     };
 
@@ -32,10 +34,10 @@ class Home extends React.Component<{}, State> {
             <Container>
                 <Title>Mini Mapper</Title>
                 {!selected ? (
-                    <Query query={tfl.GET_LINE_STATUSES}>
+                    <GetLineStatusesQuery query={tfl.GET_LINE_STATUSES}>
                         {({ data, error, loading }) => (
                             <ErrorHandler
-                                loaded={data && data.lines}
+                                loaded={!!(data && data.lines)}
                                 loading={loading}
                                 error={error}
                                 data={data}
@@ -47,26 +49,22 @@ class Home extends React.Component<{}, State> {
                                 )}
                             />
                         )}
-                    </Query>
+                    </GetLineStatusesQuery>
                 ) : (
-                    <Query
+                    <GetLineDetailsQuery
                         query={tfl.GET_LINE_DETAILS}
                         variables={{ line: selected }}
                     >
                         {({ data, error, loading }) => (
-                            <React.Fragment>
-                                <ErrorHandler
-                                    data={data}
-                                    loading={loading}
-                                    error={error}
-                                    loaded={data && data.line}
-                                    render={({ line }) => (
-                                        <Stop stop={data.line} />
-                                    )}
-                                />
-                            </React.Fragment>
+                            <ErrorHandler
+                                data={data}
+                                loading={loading}
+                                error={error}
+                                loaded={!!(data && data.line)}
+                                render={({ line }) => <Stop stop={data.line} />}
+                            />
                         )}
-                    </Query>
+                    </GetLineDetailsQuery>
                 )}
             </Container>
         );

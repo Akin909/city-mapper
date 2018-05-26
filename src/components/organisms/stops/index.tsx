@@ -1,11 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
-interface StopDetails {
-    direction: 'outbound' | 'inbound';
-    lineName: string;
-    stations: any[];
-}
+import { Station, Line } from './../../../graphql/queries/tfl'
 
 const StopContainer = styled.div`
     width: 60%;
@@ -15,19 +11,33 @@ const StopContainer = styled.div`
     flex-direction: column;
 `;
 
-const Stop = (props: { stop: StopDetails }) => {
+const Station = styled.div`
+    background-color: aquamarine;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
+    margin: 1em 0.5em;
+`;
+
+const StationDetails = styled.p`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+`;
+
+const Stop = (props: { stop: Line }) => {
     return (
         <StopContainer>
             <span>
-                <strong>{props.stop.lineName}</strong>: {props.stop.direction}
+                <strong>{props.stop.lineName}</strong>:{' '}
+                <i>{props.stop.direction}</i>
             </span>
-            {props.stop.stations.map(station => (
-                <div>
-                    <p>
+            {props.stop.stations.map((station, idx) => (
+                <Station key={`${station.name}-${idx}`}>
+                    <StationDetails>
                         <span>{station.name}</span>
                         <span>{station.status}</span>
-                    </p>
-                </div>
+                    </StationDetails>
+                </Station>
             ))}
         </StopContainer>
     );

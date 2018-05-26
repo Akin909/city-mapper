@@ -8,6 +8,8 @@
         "jsx": "react",
         "moduleResolution": "node",
         "rootDir": "src",
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
         "noImplicitThis": true,
         "noImplicitAny": true,
         "strictNullChecks": true
