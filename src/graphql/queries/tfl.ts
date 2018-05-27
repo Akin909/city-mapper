@@ -41,6 +41,7 @@ export const GET_LINE_DETAILS = gql`
             direction
             isOutboundOnly
             stations {
+                id
                 status
                 name
             }
@@ -49,6 +50,7 @@ export const GET_LINE_DETAILS = gql`
 `;
 
 export interface Station {
+    id: string;
     status: string;
     name: string;
 }
@@ -74,17 +76,39 @@ export class GetLineDetailsQuery extends Query<
     GetLineDetailVariables
 > {}
 
-// Practice Queries and mutations
-export const UPDATE_NETWORK_STATUS = gql`
-    mutation updateNetworkStatus($isConnected: Boolean) {
-        updateNetworkStatus(isConnected: $isConnected) @client
-    }
-`;
+interface StopDetails {
+    icsCode: string;
+    stopType: string;
+    stationNaptan: string;
+    lines: Line[];
+    id: string;
+    commonName: string;
+}
 
-export const GET_NETWORK_STATUS = gql`
-    query {
-        networkStatus @client {
-            isConnected
+interface GetStopDetailsData {
+    stop: StopDetails;
+}
+
+interface GetStopDetailsVariables {
+    stopId: string;
+}
+
+export class GetStopDetailsQuery extends Query<
+    GetStopDetailsData,
+    GetStopDetailsVariables
+> {}
+
+export const GET_STOP_DETAILS = gql`
+    query getStopDetail($stopId: string) {
+        stop(stopId: $stopId) @rest(type: "Stop", path: "/StopPoint/:stopId") {
+            icsCode
+            stopType
+            stationNaptan
+            id
+            commonName
+            lines {
+                name
+            }
         }
     }
 `;

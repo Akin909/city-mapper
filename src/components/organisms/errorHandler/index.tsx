@@ -1,10 +1,11 @@
 import * as React from 'react';
+import { ApolloError } from 'apollo-client';
 
 import Loading from './../../atoms/loading';
 
 interface ErrorHandlerProps<T> {
     data: T;
-    error: object;
+    error: ApolloError | undefined;
     loading: boolean;
     loaded: boolean;
     render: (data: T) => React.ReactElement<T>;

@@ -1,9 +1,10 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
-import { Station, Line } from './../../../graphql/queries/tfl'
+import { capitalize } from './../../../utils';
+import { Station, Line } from './../../../graphql/queries/tfl';
 
-const StopContainer = styled.div`
+const LineDetailsContainer = styled.div`
     width: 60%;
     height: 60%;
     overflow: auto;
@@ -12,7 +13,7 @@ const StopContainer = styled.div`
 `;
 
 const Station = styled.div`
-    background-color: aquamarine;
+    background-color: palevioletred;
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
     margin: 1em 0.5em;
 `;
@@ -24,23 +25,31 @@ const StationDetails = styled.p`
     justify-content: center;
 `;
 
-const Stop = (props: { stop: Line }) => {
+interface LineDetailsProps {
+    stop: Line;
+    onClick: (stopId: string) => void;
+}
+
+const LineDetails = (props: LineDetailsProps) => {
     return (
-        <StopContainer>
+        <LineDetailsContainer>
             <span>
-                <strong>{props.stop.lineName}</strong>:{' '}
-                <i>{props.stop.direction}</i>
+                <strong>{capitalize(props.stop.lineName)}</strong>:{' '}
+                <i>{capitalize(props.stop.direction)}</i>
             </span>
             {props.stop.stations.map((station, idx) => (
-                <Station key={`${station.name}-${idx}`}>
+                <Station
+                    key={`${station.name}-${idx}`}
+                    onClick={() => props.onClick(station.id)}
+                >
                     <StationDetails>
                         <span>{station.name}</span>
                         <span>{station.status}</span>
                     </StationDetails>
                 </Station>
             ))}
-        </StopContainer>
+        </LineDetailsContainer>
     );
 };
 
-export default Stop;
+export default LineDetails;

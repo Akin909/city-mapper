@@ -11,6 +11,7 @@
         "@types/ramda": "^0.25.29",
         "@types/react": "^16.3.14",
         "@types/react-dom": "^16.0.5",
+        "@types/react-router-dom": "^4.2.6",
         "babel-cli": "^6.26.0",
         "babel-core": "^6.26.3",
         "babel-preset-env": "^1.7.0",
@@ -31,9 +32,11 @@
         "graphql-anywhere": "^4.1.10",
         "graphql-tag": "^2.9.2",
         "rambda": "^1.1.2",
+        "ramda": "^0.25.0",
         "react": "^16.4.0",
         "react-apollo": "^2.1.0-beta.3",
         "react-dom": "^16.4.0",
+        "react-router-dom": "^4.2.2",
         "styled-components": "^3.2.6"
     }
 }

@@ -9,7 +9,7 @@ import { ApolloLink } from 'apollo-link';
 
 import '../../utils/global.css';
 import resolvers from './../../graphql/resolvers';
-import Home from './../home';
+import Routes from './../Routes';
 
 const defaults = {
     networkStatus: {
@@ -63,6 +63,6 @@ const client = new ApolloClient({
 
 export default () => (
     <ApolloProvider client={client}>
-        <Home />
+        <Routes />
     </ApolloProvider>
 );

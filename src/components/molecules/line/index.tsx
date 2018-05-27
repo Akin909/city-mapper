@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import * as R from 'rambda';
+import { compose, toLower } from 'rambda';
 
 import { Lines } from './../../../graphql/queries/tfl';
 
@@ -9,13 +9,19 @@ interface LineProps {
     onClick: (evt: React.MouseEvent<HTMLDivElement>) => void;
 }
 
-const statusReactions = {
+interface StringMap {
+    [line: string]: string;
+}
+
+const statusReactions: StringMap = {
     goodService: '😀',
     minorDelays: '😣',
     severeDelays: '🤬',
+    partClosure: '😱',
+    serviceClosed: '😴',
 };
 
-const lineColors = {
+const lineColors: StringMap = {
     bakerloo: '#996633',
     piccadilly: '#000099',
     circle: '#FFCC00',
@@ -60,7 +66,7 @@ const camelize = (word: string) => {
     return [beginning, ...upperCaseWords].join('');
 };
 
-const normalize = R.compose(camelize, replaceAmpersand, R.toLower);
+const normalize = compose(camelize, replaceAmpersand, toLower);
 
 const respondToStatus = (status: string) => {
     const normalizedStatus = normalize(status);
