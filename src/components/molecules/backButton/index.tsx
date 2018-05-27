@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { RouteComponentProps } from 'react-router';
+import { withRouter, RouteComponentProps } from 'react-router';
 
 const Previous = styled.div`
     display: flex;
@@ -18,14 +18,12 @@ const Previous = styled.div`
     left: 2em;
 `;
 
-interface Props {
-    onClick: () => void;
-}
+type Props = RouteComponentProps<{}>;
 
 const Back = (props: Props) => (
-    <Previous onClick={props.onClick}>
+    <Previous onClick={() => props.history.goBack()}>
         <span>&#8249;</span>
     </Previous>
 );
 
-export default Back;
+export default withRouter<Props>(Back);

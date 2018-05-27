@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { compose, toLower } from 'rambda';
 
+import { normalize } from './../../../utils';
 import { Lines } from './../../../graphql/queries/tfl';
 
 interface LineProps {
@@ -56,17 +56,6 @@ const LineName = styled.h3`
     text-align: center;
     margin: 0.2em;
 `;
-
-const replaceAmpersand = (word: string) => word.replace(/[&]/g, 'and');
-const camelize = (word: string) => {
-    const [beginning, ...rest] = word.split(' ');
-    const upperCaseWords = rest.map(
-        each => each[0].toUpperCase() + each.slice(1, each.length),
-    );
-    return [beginning, ...upperCaseWords].join('');
-};
-
-const normalize = compose(camelize, replaceAmpersand, toLower);
 
 const respondToStatus = (status: string) => {
     const normalizedStatus = normalize(status);

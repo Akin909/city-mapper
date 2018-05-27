@@ -9,6 +9,7 @@ import { ApolloLink } from 'apollo-link';
 
 import '../../utils/global.css';
 import resolvers from './../../graphql/resolvers';
+import { Station, Line } from './../../graphql/queries/tfl';
 import Routes from './../Routes';
 
 const defaults = {
@@ -25,12 +26,6 @@ const stateLink = withClientState({
     defaults,
 });
 
-interface Lines {
-    name: string;
-    modeName: 'tube' | 'dlr';
-    created: string;
-    modified: string;
-}
 const addTypename = (typename: string, data: any[]) =>
     data
         ? data.map(res => ({
@@ -48,11 +43,14 @@ const restLink = new RestLink({
     // If the returning data is nested adding a typepatcher allows
     // for adding a typename to the nested object or array
     typePatcher: {
-        LineDetails: (
-            data: any,
-            outerType: string,
-            patchDeeper: RestLink.FunctionalTypePatcher,
-        ) => ({ ...data, stations: addTypename('Station', data.stations) }),
+        LineDetails: (data: { stations: Station[] }) => ({
+            ...data,
+            stations: addTypename('Station', data.stations),
+        }),
+        Stop: (data: { lines: Line[] }) => ({
+            ...data,
+            lines: addTypename('Line', data.lines),
+        }),
     },
 });
 
