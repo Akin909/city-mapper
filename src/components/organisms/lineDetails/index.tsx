@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import { capitalize } from './../../../utils';
 import { lineColors } from './../../../utils/styles';
+import TflLogo from './../../atoms/tflLogo';
 import { Station, Line } from './../../../graphql/queries/tfl';
 
 const LineDetailsContainer = styled.div`
@@ -19,23 +20,19 @@ const Station = styled.div`
     margin: 1em 0.5em;
 `;
 
-const StationDetails = styled.p`
+const StationDetails = styled.div`
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    justify-content: center;
-    padding: 0 1em;
+    justify-content: flex-start;
+    padding: 0 0.4em;
 `;
 
 const StationName = styled.span`
-    display: block;
     color: white;
     font-size: 1.2em;
-    width: 100%;
     overflow: hidden;
     text-align: center;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 `;
 
 const LineName = styled<{ line: string }, 'span'>('span')`
@@ -61,6 +58,7 @@ const LineDetails = (props: LineDetailsProps) => {
                     onClick={() => props.onClick(station.id)}
                 >
                     <StationDetails>
+                        <TflLogo />
                         <StationName>{station.name}</StationName>
                         {station.status && <span>{station.status}</span>}
                     </StationDetails>

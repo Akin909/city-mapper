@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled, { css } from 'styled-components';
 import { format, compareAsc } from 'date-fns';
-import { sort, slice, length } from 'ramda';
+import { sort, splitAt, isEmpty } from 'ramda';
 
 import {
     Arrival,
@@ -17,6 +17,7 @@ import { SmallTitle } from './../../../components/atoms/title';
 interface ArrivalProps {
     stopId: string;
     limit?: number;
+    loadingMessage?: string;
 }
 
 interface ArrivalItemProps {
@@ -50,7 +51,7 @@ const ArrivalContainer = styled.li`
 `;
 
 const ArrivalName = styled.span`
-    background-color: #6200ee;
+    background-color: #427c31;
     color: white;
     display: block;
     width: 100%;
@@ -111,43 +112,49 @@ const AllArrivals = styled.div`
     height: 80%;
 `;
 
-const Arrivals = ({ stopId, limit = 3 }: ArrivalProps) => (
+const Arrivals = ({ stopId, loadingMessage, limit = 3 }: ArrivalProps) => (
     <GetArrivalsQuery query={GET_STOP_ARRIVALS} variables={{ stopId }}>
         {({ data, error, loading }) => (
             <ErrorHandler
                 data={data}
-                loading={loading}
                 error={error}
+                loading={loading}
+                loadingMessage={loadingMessage}
                 loaded={Boolean(data && data.arrivals)}
                 render={({ arrivals }: GetArrivalsData) => {
                     const sorted = sortByDate(arrivals);
-                    const nextThree = slice(0, limit, sorted);
-                    const remaining = slice(limit, length(sorted), sorted);
+                    const [nextThree, remaining] = splitAt(limit, sorted);
                     return arrivals.length ? (
                         <AllArrivals>
-                            {Boolean(nextThree.length) && (
+                            {!isEmpty(nextThree) && (
                                 <NextArrivals>
                                     <SmallTitle>Next Depatures</SmallTitle>
                                     <NextThreeContainer>
-                                        {nextThree.map(arrival => (
-                                            <ArrivalItem arrival={arrival} />
+                                        {nextThree.map((arrival, index) => (
+                                            <ArrivalItem
+                                                key={`${arrival.id}-${index}`}
+                                                arrival={arrival}
+                                            />
                                         ))}
                                     </NextThreeContainer>
                                 </NextArrivals>
                             )}
-                            {Boolean(remaining.length) && (
+                            {!isEmpty(remaining) && (
                                 <LaterArrivals>
                                     <SmallTitle>Upcoming Depatures</SmallTitle>
                                     <ArrivalsBoard>
-                                        {remaining.map(arrival => (
-                                            <ArrivalItem arrival={arrival} />
+                                        {remaining.map((arrival, index) => (
+                                            <ArrivalItem
+                                                key={`${arrival.id}-${index}`}
+                                                arrival={arrival}
+                                            />
                                         ))}
                                     </ArrivalsBoard>
                                 </LaterArrivals>
                             )}
                         </AllArrivals>
                     ) : (
-                        <p>No Upcoming Arrivals</p>
+                        <p>No departure information available</p>
                     );
                 }}
             />

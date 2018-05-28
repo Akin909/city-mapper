@@ -21,4 +21,6 @@ const Spinner = styled.div`
 
 const Loading = () => <Spinner />;
 
+export const LoadingMessage = styled.h2``;
+
 export default Loading;

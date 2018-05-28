@@ -1,5 +1,7 @@
 import {
     compose,
+    map,
+    match,
     juxt,
     join,
     head,
@@ -17,7 +19,16 @@ export const capitalizeStr = compose(
 
 export const capitalize = unless(isNil, capitalizeStr);
 
-export const replaceAmpersand = (word: string) => word.replace(/[&]/g, 'and');
+const wordRegex = /(\w+)/g;
+const hyphenate = join('-');
+
+export const kebabCase = compose(hyphenate, map(toLower), match(wordRegex));
+
+const ampersandRegex = /[&]/g;
+
+export const replaceAmpersand = (word: string) =>
+    word.replace(ampersandRegex, 'and');
+
 export const camelize = (word: string) => {
     const [beginning, ...rest] = word.split(' ');
     const upperCaseWords = rest.map(capitalize);

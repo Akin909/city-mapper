@@ -9,6 +9,7 @@ const Previous = styled.div`
     justify-content: center;
     border-radius: 10%;
     background-color: #356327;
+    box-shadow: -1px 0 1px rgba(0, 0, 0, 0.5);
     position: absolute;
     height: 1.5em;
     width: 1.5em;

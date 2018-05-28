@@ -1,6 +1,8 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
+import { propExists } from '../../../utils';
+
 import {
     StopDetails,
     GET_STOP_DETAILS,
@@ -14,6 +16,7 @@ import ErrorHandler from './../../../components/organisms/errorHandler';
 
 interface StopDetailsProps {
     stopId: string;
+    loadingMessage?: string;
 }
 
 const TransfersList = styled.ul`
@@ -44,13 +47,14 @@ const ChangeFor = styled.span`
 
 const isABus = (name: string) => /\d/.test(name);
 
-const Transfers = ({ stopId }: StopDetailsProps) => (
+const Transfers = ({ stopId, loadingMessage }: StopDetailsProps) => (
     <GetStopDetailsQuery query={GET_STOP_DETAILS} variables={{ stopId }}>
         {({ data, error, loading }) => (
             <ErrorHandler
                 data={data}
-                loading={loading}
                 error={error}
+                loading={loading}
+                loadingMessage={loadingMessage}
                 loaded={Boolean(data && data.stop)}
                 render={({ stop }: { stop: StopDetails }) => (
                     <div>

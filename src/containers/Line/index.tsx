@@ -8,6 +8,7 @@ import {
 
 import ErrorHandler from './../../components/organisms/errorHandler';
 import LineDetails from './../../components/organisms/lineDetails';
+import { kebabCase } from '../../utils';
 
 type Props = RouteComponentProps<{ line: string }>;
 
@@ -17,7 +18,7 @@ export default class LineContainer extends React.PureComponent<Props> {
     };
 
     render() {
-        const line = encodeURIComponent(this.props.match.params.line);
+        const line = kebabCase(this.props.match.params.line);
         return (
             <GetLineDetailsQuery query={GET_LINE_DETAILS} variables={{ line }}>
                 {({ data, error, loading }) => (

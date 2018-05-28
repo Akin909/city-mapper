@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ApolloError } from 'apollo-client';
 
-import Loading from './../../atoms/loading';
+import Loading, { LoadingMessage } from './../../atoms/loading';
 
 interface ErrorHandlerProps<T> {
     data: T;
@@ -9,12 +9,17 @@ interface ErrorHandlerProps<T> {
     loading: boolean;
     loaded: boolean;
     render: (data: T) => React.ReactElement<T>;
+    loadingMessage?: string;
 }
 
 const ErrorHandler = (props: ErrorHandlerProps<any>) => {
-    const { loading, data, loaded } = props;
+    const { loading, loadingMessage, data, loaded } = props;
     if (loading) {
-        return <Loading />;
+        return loadingMessage ? (
+            <LoadingMessage>{props.loadingMessage}</LoadingMessage>
+        ) : (
+            <Loading />
+        );
     }
     if (data && loaded) {
         return props.render(data);
