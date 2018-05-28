@@ -63,6 +63,10 @@ export interface Line {
     stations: Station[];
 }
 
+interface Transfer {
+    name: string;
+}
+
 interface GetLineDetailsData {
     line: Line;
 }
@@ -76,11 +80,11 @@ export class GetLineDetailsQuery extends Query<
     GetLineDetailVariables
 > {}
 
-interface StopDetails {
+export interface StopDetails {
     icsCode: string;
     stopType: string;
     stationNaptan: string;
-    lines: Line[];
+    lines: Transfer[];
     id: string;
     commonName: string;
 }
@@ -101,14 +105,76 @@ export class GetStopDetailsQuery extends Query<
 export const GET_STOP_DETAILS = gql`
     query getStopDetail($stopId: string) {
         stop(stopId: $stopId) @rest(type: "Stop", path: "/StopPoint/:stopId") {
+            id
             icsCode
             stopType
             stationNaptan
-            id
             commonName
             lines {
                 name
             }
+        }
+    }
+`;
+
+interface GetArrivalsVariables {
+    stopId: string;
+}
+
+export interface GetArrivalsData {
+    arrivals: Arrival[];
+}
+
+export class GetArrivalsQuery extends Query<
+    GetArrivalsData,
+    GetArrivalsVariables
+> {}
+
+export interface Arrival {
+    id: string;
+    operationType: number;
+    vehicleId: string;
+    naptanId: string;
+    stationName: string;
+    lineId: string;
+    lineName: string;
+    platformName: string;
+    direction: string;
+    bearing: string;
+    destinationNaptanId: string;
+    destinationName: string;
+    timestamp: string;
+    timeToStation: number;
+    currentLocation: string;
+    towards: string;
+    expectedArrival: string;
+    timeToLive: string;
+    modeName: string;
+}
+
+export const GET_STOP_ARRIVALS = gql`
+    query getStopArrivals($stopId: string) {
+        arrivals(stopId: $stopId)
+            @rest(type: "Arrivals", path: "/StopPoint/:stopId/arrivals") {
+            id
+            operationType
+            vehicleId
+            naptanId
+            stationName
+            lineId
+            lineName
+            platformName
+            direction
+            bearing
+            destinationNaptanId
+            destinationName
+            timestamp
+            timeToStation
+            currentLocation
+            towards
+            expectedArrival
+            timeToLive
+            modeName
         }
     }
 `;

@@ -9,7 +9,7 @@ import { ApolloLink } from 'apollo-link';
 
 import '../../utils/global.css';
 import resolvers from './../../graphql/resolvers';
-import { Station, Line } from './../../graphql/queries/tfl';
+import { Arrival, Station, Line } from './../../graphql/queries/tfl';
 import Routes from './../Routes';
 
 const defaults = {
@@ -26,7 +26,7 @@ const stateLink = withClientState({
     defaults,
 });
 
-const addTypename = (typename: string, data: any[]) =>
+const addTypename = (typename: string, data: any[] | undefined) =>
     data
         ? data.map(res => ({
               __typename: typename,
@@ -50,6 +50,10 @@ const restLink = new RestLink({
         Stop: (data: { lines: Line[] }) => ({
             ...data,
             lines: addTypename('Line', data.lines),
+        }),
+        Arrivals: (data: { arrivals: Arrival[] }) => ({
+            ...data,
+            arrivals: addTypename('Arrival', data.arrivals),
         }),
     },
 });

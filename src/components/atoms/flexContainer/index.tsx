@@ -7,8 +7,10 @@ const Container = styled.div`
     align-items: center;
     width: 100%;
     height: 100%;
-    padding: 0 5%;
-    background-color: whitesmoke;
+    padding: 5%;
+    background-color: #5aa842;
+    overflow: auto;
+    color: white;
 `;
 
 export default Container;

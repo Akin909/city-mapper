@@ -8,14 +8,14 @@ const Previous = styled.div`
     align-items: center;
     justify-content: center;
     border-radius: 10%;
-    background-color: whitesmoke;
+    background-color: #356327;
     position: absolute;
     height: 1.5em;
     width: 1.5em;
     font-size: 1.5em;
     text-align: center;
-    top: 2em;
-    left: 2em;
+    top: 1em;
+    left: 1em;
 `;
 
 type Props = RouteComponentProps<{}>;

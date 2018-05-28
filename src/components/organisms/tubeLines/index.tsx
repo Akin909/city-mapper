@@ -8,8 +8,14 @@ interface TubelinesProps {
     lines: Lines[];
     onClick: (name: string) => () => void;
 }
+
+const TubeLinesContainer = Grid.extend`
+    grid-gap: 0.2em;
+    padding: 1em;
+`;
+
 const TubeLines = ({ lines, onClick }: TubelinesProps) => (
-    <Grid>
+    <TubeLinesContainer>
         {lines.map((line, i) => (
             <Line
                 line={line}
@@ -17,7 +23,7 @@ const TubeLines = ({ lines, onClick }: TubelinesProps) => (
                 onClick={onClick(line.name)}
             />
         ))}
-    </Grid>
+    </TubeLinesContainer>
 );
 
 export default TubeLines;

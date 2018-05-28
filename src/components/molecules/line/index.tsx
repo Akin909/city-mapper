@@ -2,38 +2,13 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import { normalize } from './../../../utils';
+import { lineColors, statusReactions } from './../../../utils/styles';
 import { Lines } from './../../../graphql/queries/tfl';
 
 interface LineProps {
     line: Lines;
     onClick: (evt: React.MouseEvent<HTMLDivElement>) => void;
 }
-
-interface StringMap {
-    [line: string]: string;
-}
-
-const statusReactions: StringMap = {
-    goodService: '😀',
-    minorDelays: '😣',
-    severeDelays: '🤬',
-    partClosure: '😱',
-    serviceClosed: '😴',
-};
-
-const lineColors: StringMap = {
-    bakerloo: '#996633',
-    piccadilly: '#000099',
-    circle: '#FFCC00',
-    central: '#CC3333',
-    jubilee: '#868F98',
-    metropolitan: '#660066',
-    district: '#006633',
-    northern: '#000000',
-    victoria: '#0099CC',
-    hammersmithAndCity: '#CC9999',
-    waterlooAndCity: '#66CCCC',
-};
 
 interface ContainerProps {
     line: string;
@@ -46,6 +21,8 @@ const LineContainer = styled<ContainerProps, 'div'>('div')`
     justify-content: center;
     padding: 1em;
     color: white;
+    border-radius: 5px;
+    box-shadow: -0.5px 1px 1px #356327;
 `;
 
 const Detail = styled.span`

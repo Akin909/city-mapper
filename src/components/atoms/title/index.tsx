@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 
 const Title = styled.h1`
-    display: flex;
+    display: block;
+    text-align: center;
 `;
 
 export const SmallTitle = Title.withComponent('h3');

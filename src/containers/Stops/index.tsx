@@ -1,45 +1,25 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 
-import {
-    GET_STOP_DETAILS,
-    GetStopDetailsQuery,
-} from './../../graphql/queries/tfl';
-
-import { SmallTitle } from './../../components/atoms/title';
-import ErrorHandler from './../../components/organisms/errorHandler';
+import Container from './../../components/atoms/flexContainer';
+import Arrivals from './../../components/organisms/arrivals';
+import Transfers from './../../components/organisms/transfers';
 
 type Props = RouteComponentProps<{ stopId: string }>;
+
+const ScrollContainer = Container.extend`
+    overflow-y: scroll;
+    padding: 2em;
+`;
 
 export default class StopsContainer extends React.PureComponent<Props> {
     render() {
         const { stopId } = this.props.match.params;
         return (
-            <GetStopDetailsQuery
-                query={GET_STOP_DETAILS}
-                variables={{ stopId }}
-            >
-                {({ data, error, loading }) => (
-                    <ErrorHandler
-                        data={data}
-                        loading={loading}
-                        error={error}
-                        loaded={Boolean(data && data.stop)}
-                        render={({ stop }) => (
-                            <React.Fragment>
-                                <SmallTitle>{stop.commonName}</SmallTitle>
-                                <ul>
-                                    {stop.lines.map(
-                                        (each: { name: string }) => (
-                                            <li>{each.name}</li>
-                                        ),
-                                    )}
-                                </ul>
-                            </React.Fragment>
-                        )}
-                    />
-                )}
-            </GetStopDetailsQuery>
+            <ScrollContainer>
+                <Transfers stopId={stopId} />
+                <Arrivals stopId={stopId} />
+            </ScrollContainer>
         );
     }
 }
