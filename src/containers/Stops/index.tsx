@@ -17,14 +17,8 @@ export default class StopsContainer extends React.PureComponent<Props> {
         const { stopId } = this.props.match.params;
         return (
             <ScrollContainer>
-                <Transfers
-                    stopId={stopId}
-                    loadingMessage="Loading Transfers..."
-                />
-                <Arrivals
-                    stopId={stopId}
-                    loadingMessage="Loading Arrivals..."
-                />
+                <Transfers stopId={stopId} loadingMessage="Loading Transfers..." />
+                <Arrivals limit={3} stopId={stopId} loadingMessage="Loading Arrivals..." />
             </ScrollContainer>
         );
     }

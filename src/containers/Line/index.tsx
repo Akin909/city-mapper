@@ -24,8 +24,8 @@ export default class LineContainer extends React.PureComponent<Props> {
                 {({ data, error, loading }) => (
                     <ErrorHandler
                         data={data}
-                        loading={loading}
                         error={error}
+                        loading={loading}
                         loaded={Boolean(data && data.line)}
                         render={({ line }) => (
                             <LineDetails

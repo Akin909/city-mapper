@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled, { css } from 'styled-components';
 import { format, compareAsc } from 'date-fns';
-import { sort, splitAt, isEmpty } from 'ramda';
+import { sort, isEmpty, groupBy, slice, compose, not } from 'ramda';
 
 import {
     Arrival,
@@ -10,6 +10,7 @@ import {
     GetArrivalsQuery,
 } from './../../../graphql/queries/tfl';
 
+import TrainStation from './../../../components/atoms/trainStation';
 import Grid from './../../../components/atoms/grid';
 import ErrorHandler from './../../../components/organisms/errorHandler';
 import { SmallTitle } from './../../../components/atoms/title';
@@ -59,10 +60,7 @@ const ArrivalName = styled.span`
 `;
 
 const sortByDate = (arrivals: Arrival[]) =>
-    sort(
-        (prev, next) => compareAsc(prev.expectedArrival, next.expectedArrival),
-        arrivals,
-    );
+    sort((prev, next) => compareAsc(prev.expectedArrival, next.expectedArrival), arrivals);
 
 const NextThreeContainer = styled.div`
     display: flex;
@@ -102,15 +100,18 @@ const NextArrivals = styled.div`
     flex: 1;
 `;
 
-const LaterArrivals = styled.div`
-    display: flex;
-    flex-direction: column;
-    flex: 2;
-`;
-
 const AllArrivals = styled.div`
     height: 80%;
 `;
+
+const PlatformName = SmallTitle.extend`
+    text-decoration: underline;
+`;
+const Platform = styled.div``;
+
+const notEmpty = compose(not, isEmpty);
+const groupByPlatform = groupBy((arrival: Arrival) => arrival.platformName);
+const listByTimeAndPlatform = compose(groupByPlatform, sortByDate);
 
 const Arrivals = ({ stopId, loadingMessage, limit = 3 }: ArrivalProps) => (
     <GetArrivalsQuery query={GET_STOP_ARRIVALS} variables={{ stopId }}>
@@ -122,36 +123,39 @@ const Arrivals = ({ stopId, loadingMessage, limit = 3 }: ArrivalProps) => (
                 loadingMessage={loadingMessage}
                 loaded={Boolean(data && data.arrivals)}
                 render={({ arrivals }: GetArrivalsData) => {
-                    const sorted = sortByDate(arrivals);
-                    const [nextThree, remaining] = splitAt(limit, sorted);
-                    return arrivals.length ? (
+                    const sorted = listByTimeAndPlatform(arrivals);
+                    const platforms = Object.keys(sorted);
+                    const limitToThree = slice(0, limit);
+                    return notEmpty(arrivals) ? (
                         <AllArrivals>
-                            {!isEmpty(nextThree) && (
-                                <NextArrivals>
-                                    <SmallTitle>Next Depatures</SmallTitle>
-                                    <NextThreeContainer>
-                                        {nextThree.map((arrival, index) => (
-                                            <ArrivalItem
-                                                key={`${arrival.id}-${index}`}
-                                                arrival={arrival}
-                                            />
-                                        ))}
-                                    </NextThreeContainer>
-                                </NextArrivals>
-                            )}
-                            {!isEmpty(remaining) && (
-                                <LaterArrivals>
-                                    <SmallTitle>Upcoming Depatures</SmallTitle>
-                                    <ArrivalsBoard>
-                                        {remaining.map((arrival, index) => (
-                                            <ArrivalItem
-                                                key={`${arrival.id}-${index}`}
-                                                arrival={arrival}
-                                            />
-                                        ))}
-                                    </ArrivalsBoard>
-                                </LaterArrivals>
-                            )}
+                            <NextArrivals>
+                                <SmallTitle>Next Depatures</SmallTitle>
+                                <NextThreeContainer>
+                                    {platforms.map((platform, index) => (
+                                        <Platform key={`${platform}-${index}`}>
+                                            <PlatformName>
+                                                <TrainStation
+                                                    height={30}
+                                                    width={30}
+                                                    color="#FFFFFF"
+                                                />
+                                                <div>{platform}</div>
+                                            </PlatformName>
+                                            <ArrivalsBoard>
+                                                {notEmpty(sorted[platform]) &&
+                                                    limitToThree(sorted[platform]).map(
+                                                        (arrival, i) => (
+                                                            <ArrivalItem
+                                                                key={`${arrival.id}-${i}`}
+                                                                arrival={arrival}
+                                                            />
+                                                        ),
+                                                    )}
+                                            </ArrivalsBoard>
+                                        </Platform>
+                                    ))}
+                                </NextThreeContainer>
+                            </NextArrivals>
                         </AllArrivals>
                     ) : (
                         <p>No departure information available</p>
