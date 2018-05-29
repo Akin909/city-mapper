@@ -7,19 +7,14 @@ import Transfers from './../../components/organisms/transfers';
 
 type Props = RouteComponentProps<{ stopId: string }>;
 
-const ScrollContainer = Container.extend`
-    overflow-y: auto;
-    padding: 2em;
-`;
-
 export default class StopsContainer extends React.PureComponent<Props> {
     render() {
         const { stopId } = this.props.match.params;
         return (
-            <ScrollContainer>
+            <Container>
                 <Transfers stopId={stopId} loadingMessage="Loading Transfers..." />
                 <Arrivals limit={3} stopId={stopId} loadingMessage="Loading Arrivals..." />
-            </ScrollContainer>
+            </Container>
         );
     }
 }

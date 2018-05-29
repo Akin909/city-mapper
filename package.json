@@ -19,6 +19,7 @@
         "enzyme": "^3.3.0",
         "enzyme-adapter-react-16": "^1.1.1",
         "jest": "^23.0.0",
+        "parcel-plugin-sw-precache": "^0.5.1",
         "prettier": "^1.12.1",
         "typescript": "^2.8.3"
     },

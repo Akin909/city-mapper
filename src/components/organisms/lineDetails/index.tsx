@@ -12,12 +12,18 @@ const LineDetailsContainer = styled.div`
     overflow: auto;
     display: flex;
     flex-direction: column;
+    align-items: center;
 `;
 
 const Station = styled.div`
     background-color: #356327;
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
     margin: 1em 0.5em;
+    width: 100%;
+
+    @media (min-width: 700px) {
+        width: 50%;
+    }
 `;
 
 const StationDetails = styled.div`
@@ -53,10 +59,7 @@ const LineDetails = (props: LineDetailsProps) => {
                 </LineName>: <i>{capitalize(props.stop.direction)}</i>
             </span>
             {props.stop.stations.map((station, idx) => (
-                <Station
-                    key={`${station.name}-${idx}`}
-                    onClick={() => props.onClick(station.id)}
-                >
+                <Station key={`${station.name}-${idx}`} onClick={() => props.onClick(station.id)}>
                     <StationDetails>
                         <TflLogo />
                         <StationName>{station.name}</StationName>

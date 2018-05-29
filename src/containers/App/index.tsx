@@ -12,12 +12,7 @@ import resolvers from './../../graphql/resolvers';
 import { Arrival, Station, Line } from './../../graphql/queries/tfl';
 import Routes from './../Routes';
 
-const defaults = {
-    networkStatus: {
-        __typename: 'NetworkStatus',
-        isConnected: true,
-    },
-};
+const defaults = {};
 
 const cache = new InMemoryCache();
 const stateLink = withClientState({

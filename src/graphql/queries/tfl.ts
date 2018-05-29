@@ -3,8 +3,8 @@ import { Query } from 'react-apollo';
 
 export const GET_LINE_STATUSES = gql`
     query lineStatuses {
-        lines
-            @rest(method: "GET", type: "Line", path: "/line/mode/tube/status") {
+        lines @rest(method: "GET", type: "Line", path: "/line/mode/tube/status") {
+            id
             name
             modeName
             lineStatuses
@@ -31,11 +31,8 @@ export class GetLineStatusesQuery extends Query<GetLinesData> {}
 
 export const GET_LINE_DETAILS = gql`
     query lineDetails($line: String) {
-        line(line: $line)
-            @rest(
-                type: "LineDetails"
-                path: "/line/:line/route/sequence/outbound"
-            ) {
+        line(line: $line) @rest(type: "LineDetails", path: "/line/:line/route/sequence/outbound") {
+            id
             lineId
             lineName
             direction
@@ -75,10 +72,7 @@ interface GetLineDetailVariables {
     line: string;
 }
 
-export class GetLineDetailsQuery extends Query<
-    GetLineDetailsData,
-    GetLineDetailVariables
-> {}
+export class GetLineDetailsQuery extends Query<GetLineDetailsData, GetLineDetailVariables> {}
 
 export interface StopDetails {
     icsCode: string;
@@ -97,10 +91,7 @@ interface GetStopDetailsVariables {
     stopId: string;
 }
 
-export class GetStopDetailsQuery extends Query<
-    GetStopDetailsData,
-    GetStopDetailsVariables
-> {}
+export class GetStopDetailsQuery extends Query<GetStopDetailsData, GetStopDetailsVariables> {}
 
 export const GET_STOP_DETAILS = gql`
     query getStopDetail($stopId: string) {
@@ -125,10 +116,7 @@ export interface GetArrivalsData {
     arrivals: Arrival[];
 }
 
-export class GetArrivalsQuery extends Query<
-    GetArrivalsData,
-    GetArrivalsVariables
-> {}
+export class GetArrivalsQuery extends Query<GetArrivalsData, GetArrivalsVariables> {}
 
 export interface Arrival {
     id: string;
@@ -154,8 +142,7 @@ export interface Arrival {
 
 export const GET_STOP_ARRIVALS = gql`
     query getStopArrivals($stopId: string) {
-        arrivals(stopId: $stopId)
-            @rest(type: "Arrivals", path: "/StopPoint/:stopId/arrivals") {
+        arrivals(stopId: $stopId) @rest(type: "Arrivals", path: "/StopPoint/:stopId/arrivals") {
             id
             operationType
             vehicleId
