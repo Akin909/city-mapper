@@ -12,15 +12,15 @@ export const statusReactions: StringMap = {
 };
 
 export const lineColors: StringMap = {
-    bakerloo: '#996633',
-    piccadilly: '#000099',
-    circle: '#FFCC00',
-    central: '#CC3333',
-    jubilee: '#868F98',
-    metropolitan: '#660066',
-    district: '#006633',
+    bakerloo: '#B36305',
+    piccadilly: '#003688',
+    circle: '#FFD300',
+    central: '#E32017',
+    jubilee: '#A0A5A9',
+    metropolitan: '#9B0056',
+    district: '#00782A',
     northern: '#000000',
-    victoria: '#0099CC',
-    hammersmithAndCity: '#CC9999',
-    waterlooAndCity: '#66CCCC',
+    victoria: '#0098D4',
+    hammersmithAndCity: '#F3A9BB',
+    waterlooAndCity: '#95CDBA',
 };

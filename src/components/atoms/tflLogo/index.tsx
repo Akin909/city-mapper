@@ -27,14 +27,14 @@ const Bar = styled.div`
 `;
 
 const Container = styled<StyleProps, 'div'>('div')`
-  width: ${p => p.width || '3em'}
-  height: ${p => p.height || '3em'}
-  margin: 0.5em;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+    min-width: ${p => p.width || '3em'};
+    height: ${p => p.height || '3em'};
+    margin: 0.5em;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 `;
 
 const TflLogo = (props: { showText?: boolean }) => {

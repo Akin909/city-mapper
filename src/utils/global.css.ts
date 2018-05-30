@@ -17,6 +17,7 @@ export default injectGlobal`
     sans-serif,
     "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol";
+    background-color: #5aa842;
   }
 
   * {
