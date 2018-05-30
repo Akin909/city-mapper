@@ -5,6 +5,7 @@
     "license": "MIT",
     "scripts": {
         "start": "parcel index.html",
+        "build": "yarn build src",
         "test": "jest --watch"
     },
     "devDependencies": {
@@ -33,7 +34,6 @@
         "graphql": "^0.13.2",
         "graphql-anywhere": "^4.1.10",
         "graphql-tag": "^2.9.2",
-        "rambda": "^1.1.2",
         "ramda": "^0.25.0",
         "react": "^16.4.0",
         "react-apollo": "^2.1.0-beta.3",

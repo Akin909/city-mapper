@@ -49,10 +49,13 @@ enhance what the app presents like station information, accessibility.
 
 *   Unzip the project
 *   Run `yarn/npm` install
-*   Create a .env file in the root of the project and add a TFL APP_ID and APP_KEY env vars as well as a TFL endpoint
-    *   if running this locally i.e. via local host use `TFL_API=https://cors-anywhere.herokuapp.com/https://api.tfl.gov.uk`
-    *   this endpoint uses the cors-anywhere project to proxy the API requests to bypass CORS issues contacting the endpoint
-        from local host.
+*   Create a .env file in the root of the project and add a TFL APP_ID and APP_KEY env vars as well as a TFL endpoint -
+    NOTE: Please make sure to complete this step BEFORE building the app (`yarn/npm start`) as `parcel`'s HMR can be a picky about detecting
+    this after the app is initially built
+
+*   if running this locally i.e. via local host use `TFL_API=https://cors-anywhere.herokuapp.com/https://api.tfl.gov.uk`
+*   this endpoint uses the cors-anywhere project to proxy the API requests to bypass CORS issues contacting the endpoint
+    from local host.
 *   Run yarn start
 
 ## Future Work/Improvements
