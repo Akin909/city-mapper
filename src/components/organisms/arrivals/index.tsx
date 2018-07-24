@@ -11,6 +11,7 @@ import {
 } from './../../../graphql/queries/tfl';
 
 import TrainStation from './../../../components/atoms/trainStation';
+import Grid from './../../../components/atoms/grid';
 import ErrorHandler from './../../../components/organisms/errorHandler';
 import { SmallTitle } from './../../../components/atoms/title';
 
@@ -28,6 +29,13 @@ const padding = css`
     padding: 0.4em;
 `;
 
+const ArrivalsBoard = Grid.withComponent('ul').extend`
+  padding: 1em;
+  grid-column-gap: 0.5em;
+  grid-row-gap: 0.5em;
+  overflow-y: scroll;
+`;
+
 const ArrivalDetail = styled.span`
     display: block;
     text-align: left;
@@ -35,14 +43,11 @@ const ArrivalDetail = styled.span`
     ${padding};
 `;
 
-const ArrivalListItem = styled.li`
+const ArrivalContainer = styled.li`
     color: black;
     list-style-type: none;
     background-color: whitesmoke;
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
-    margin: 0.5em;
-    width: 15em;
-    height: 16em;
     overflow: auto;
 `;
 
@@ -51,62 +56,59 @@ const ArrivalName = styled.span`
     color: white;
     display: block;
     width: 100%;
-    min-height: 3em;
     ${padding};
 `;
 
 const sortByDate = (arrivals: Arrival[]) =>
     sort((prev, next) => compareAsc(prev.expectedArrival, next.expectedArrival), arrivals);
 
-const ArrivalsContainer = styled.div`
-    width: 100%;
+const NextThreeContainer = styled.div`
     display: flex;
+    flex-direction: row;
     justify-content: center;
-    flex-direction: column;
-`;
-
-const AllArrivals = styled.div`
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    height: 100%;
-`;
-
-const PlatformName = SmallTitle.extend`
-    text-decoration: underline;
-`;
-
-const ArrivalsList = styled.ul`
-    padding: 0;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
 
     @media (max-width: 700px) {
         flex-direction: column;
-        align-items: center;
-        > li {
-            width: 100%;
-        }
+    }
+
+    > li {
+        margin: 0.5em;
     }
 `;
 
 const ArrivalItem = ({ arrival }: ArrivalItemProps) => (
-    <ArrivalListItem key={arrival.id}>
-        <ArrivalName>
-            <strong>{arrival.destinationName || 'Check front of the train'}</strong>
-        </ArrivalName>
+    <ArrivalContainer key={arrival.id}>
+        {arrival.destinationName && (
+            <ArrivalName>
+                <strong>{arrival.destinationName}</strong>
+            </ArrivalName>
+        )}
         <ArrivalDetail>
             Arriving in
             <strong>
                 <em>{format(arrival.expectedArrival, ' hh:mm')}</em>
             </strong>
         </ArrivalDetail>
-        <ArrivalDetail>Currently: {arrival.currentLocation}</ArrivalDetail>
+        <ArrivalDetail>{arrival.currentLocation}</ArrivalDetail>
         <ArrivalDetail>Heading towards {arrival.towards}</ArrivalDetail>
-    </ArrivalListItem>
+    </ArrivalContainer>
 );
+
+const NextArrivals = styled.div`
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+`;
+
+const AllArrivals = styled.div`
+    height: 80%;
+`;
+
+const PlatformName = SmallTitle.extend`
+    text-decoration: underline;
+`;
+
+const Platform = styled.div``;
 
 const notEmpty = compose(not, isEmpty);
 const groupByPlatform = groupBy((arrival: Arrival) => arrival.platformName);
@@ -130,26 +132,36 @@ const Arrivals = ({ stopId, loadingMessage, limit = 3 }: ArrivalProps) => (
                     const platforms = orderAlphanumericObject(sorted);
                     const limitToThree = slice(0, limit);
                     return notEmpty(arrivals) ? (
-                        <ArrivalsContainer>
-                            <SmallTitle>Next Depatures</SmallTitle>
-                            {platforms.map((platform, index) => (
-                                <AllArrivals key={`${platform}-${index}`}>
-                                    <PlatformName>
-                                        <TrainStation height={30} width={30} color="#FFFFFF" />
-                                        <div>{platform}</div>
-                                    </PlatformName>
-                                    <ArrivalsList>
-                                        {notEmpty(sorted[platform]) &&
-                                            limitToThree(sorted[platform]).map((arrival, i) => (
-                                                <ArrivalItem
-                                                    key={`${arrival.id}-${i}`}
-                                                    arrival={arrival}
+                        <AllArrivals>
+                            <NextArrivals>
+                                <SmallTitle>Next Depatures</SmallTitle>
+                                <NextThreeContainer>
+                                    {platforms.map((platform, index) => (
+                                        <Platform key={`${platform}-${index}`}>
+                                            <PlatformName>
+                                                <TrainStation
+                                                    height={30}
+                                                    width={30}
+                                                    color="#FFFFFF"
                                                 />
-                                            ))}
-                                    </ArrivalsList>
-                                </AllArrivals>
-                            ))}
-                        </ArrivalsContainer>
+                                                <div>{platform}</div>
+                                            </PlatformName>
+                                            <ArrivalsBoard>
+                                                {notEmpty(sorted[platform]) &&
+                                                    limitToThree(sorted[platform]).map(
+                                                        (arrival, i) => (
+                                                            <ArrivalItem
+                                                                key={`${arrival.id}-${i}`}
+                                                                arrival={arrival}
+                                                            />
+                                                        ),
+                                                    )}
+                                            </ArrivalsBoard>
+                                        </Platform>
+                                    ))}
+                                </NextThreeContainer>
+                            </NextArrivals>
+                        </AllArrivals>
                     ) : (
                         <p>No departure information available</p>
                     );

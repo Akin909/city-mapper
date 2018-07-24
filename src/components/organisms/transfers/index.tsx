@@ -1,8 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
-import { propExists } from '../../../utils';
-
 import { StopDetails, GET_STOP_DETAILS, GetStopDetailsQuery } from './../../../graphql/queries/tfl';
 
 import Bus from './../../../components/atoms/bus';
